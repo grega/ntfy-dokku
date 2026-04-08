@@ -38,7 +38,11 @@ git push dokku main
 ## Test
 
 ```bash
+# Without auth (default config)
 curl -d "Hello from Dokku!" https://ntfy.your-domain.com/aircraft-alerts
+
+# With auth (if access control is enabled)
+curl -H "Authorization: Bearer tk_your_token_here" -d "Hello from Dokku!" https://ntfy.your-domain.com/aircraft-alerts
 ```
 
 ## Optional: Access control
@@ -55,7 +59,10 @@ Create `/var/lib/dokku/data/storage/ntfy-config/server.yml` on the host:
 ```yaml
 auth-default-access: "deny-all"
 auth-file: "/var/cache/ntfy/user.db"
+web-root: "disable"
 ```
+
+The `web-root: "disable"` setting hides the web UI entirely. The API still works — the phone app and any services using token auth are unaffected.
 
 Then rebuild and add a user:
 
