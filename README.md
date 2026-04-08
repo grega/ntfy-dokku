@@ -57,12 +57,20 @@ dokku storage:mount ntfy /var/lib/dokku/data/storage/ntfy-config:/etc/ntfy
 Create `/var/lib/dokku/data/storage/ntfy-config/server.yml` on the host:
 
 ```yaml
+base-url: "https://ntfy.your-domain.com"
 auth-default-access: "deny-all"
 auth-file: "/var/cache/ntfy/user.db"
-web-root: "disable"
 ```
 
-The `web-root: "disable"` setting hides the web UI entirely. The API still works — the phone app and any services using token auth are unaffected.
+Optionally also add:
+
+```yaml
+web-root: "disable"
+upstream-base-url: "https://ntfy.sh"
+```
+
+- `web-root: "disable"` — hides the web UI entirely. The API still works — the phone app and any services using token auth are unaffected.
+- `upstream-base-url` — required for **instant iOS notifications**. Without this, iOS notifications can be delayed by hours. Your server forwards a small poll request (just the message ID) to ntfy.sh, which triggers Apple's push notification service. The iOS app then fetches the actual message content from your server, so message contents stay private.
 
 Then rebuild and add a user:
 
